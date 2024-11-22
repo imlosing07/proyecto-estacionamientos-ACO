@@ -5,19 +5,10 @@ F = (1-p) * F
 0 = favorece explotacion
 - Deposito de feromonas 
 F = F + Q / distancia
-- Probabilidad de elegir caminos
-P(A) = (F^alfa * V^beta)/ Total de arriba
-F = feromona vecina
-V = visibilidad = 1/distancia
-alfa = influencia de feromonas
-beta = influencia de visibilidad
 """
-from nodo import Nodo
-from estacionamiento import Estacionamiento
 from arista import Arista
+from config import NombreBD
 import sqlite3
-
-NombreBD = 'base_grafo.db'
 
 class Grafo:
     def __init__(self):
@@ -45,6 +36,11 @@ class Grafo:
     def evaporar(self,indiceEvaporacion):
         for arista in self.aristas:
             arista.feromonas = arista.feromonas * (1 - indiceEvaporacion)
+            
+    # resetear feromonas
+    def resetear(self):
+        for arista in self.aristas:
+            arista.feromonas = 1.0
 
     # Buscar vecino 
     def buscarVecino(self, idNodo):

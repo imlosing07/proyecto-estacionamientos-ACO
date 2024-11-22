@@ -1,7 +1,6 @@
 #Clase Nodo
+from config import NombreBD
 import sqlite3
-
-NombreBD = 'base_grafo.db'
 
 class Nodo:
     def __init__(self, id, nombre, latitud, longitud):

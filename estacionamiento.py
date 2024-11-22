@@ -1,4 +1,5 @@
 from nodo import Nodo
+from config import NombreBD
 import sqlite3
 
 class Estacionamiento(Nodo):
@@ -11,7 +12,7 @@ class Estacionamiento(Nodo):
     # Método para obtener un estacionamiento por su ID
     @staticmethod
     def obtener(id):
-        conn = sqlite3.connect('base_grafo.db')
+        conn = sqlite3.connect(NombreBD)
         cursor = conn.cursor()
         cursor.execute('''
             SELECT nodo.ID, nodo.Nombre, nodo.Latitud, nodo.Longitud, estacionamiento.Valoracion, estacionamiento.Plaza

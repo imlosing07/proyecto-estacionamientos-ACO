@@ -1,15 +1,14 @@
 from estacionamiento import Estacionamiento
+from config import NombreBD, IndiceFeromona
 import sqlite3
 
-NombreBD = 'base_grafo.db'
-
 class Arista:
-    def __init__(self, id, nodoInicio, nodoFinal, distancia,feromonas=1.0): #Feromonas = C/(nodosTotales*longuitud)
+    def __init__(self, id, nodoInicio, nodoFinal, distancia): 
         self.id = id
         self.nodoInicio = nodoInicio
         self.nodoFinal = nodoFinal
         self.distancia = distancia
-        self.feromonas = feromonas
+        self.feromonas = IndiceFeromona
     # Metodo para obtener una Arista por su ID
     @staticmethod
     def obtener(id): #Cambiar el predeterminado
@@ -35,7 +34,7 @@ class Arista:
         return None
     #retorna distancia, nodoFinal
     def ObtenerDistancia(self):
-        estacionamiento = Estacionamiento.obtener(self.nodoFinal) #Ver sui existe estacionamiento
+        estacionamiento = Estacionamiento.obtener(self.nodoFinal) #Ver si existe estacionamiento
         if estacionamiento and estacionamiento.esta_lleno():
             del estacionamiento # eliminar
             return 10000, self.nodoFinal # Cambiar la distancia para la solucion 

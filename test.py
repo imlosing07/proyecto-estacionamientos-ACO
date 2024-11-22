@@ -9,10 +9,13 @@ from nodo import Nodo
 from estacionamiento import Estacionamiento
 from arista import Arista
 from grafo import Grafo
+from ACO import ACO
+from config import NombreBD
 import sqlite3
 
+
 def crearBaseNodos():
-    conn = sqlite3.connect('base_grafo.db')
+    conn = sqlite3.connect(NombreBD)
     cursor = conn.cursor()
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS nodo (
@@ -25,7 +28,7 @@ def crearBaseNodos():
     conn.commit()
 
 def insertarNodo(nombre, latitud, longitud):
-    conn = sqlite3.connect('base_grafo.db')
+    conn = sqlite3.connect(NombreBD)
     cursor = conn.cursor()
     cursor.execute('''
         INSERT INTO nodo (Nombre, Latitud, Longitud)
@@ -35,7 +38,7 @@ def insertarNodo(nombre, latitud, longitud):
     conn.close()
 
 def crearBaseEstacionamiento():
-    conn = sqlite3.connect('base_grafo.db')
+    conn = sqlite3.connect(NombreBD)
     cursor = conn.cursor()
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS estacionamiento (
@@ -50,7 +53,7 @@ def crearBaseEstacionamiento():
     conn.close()
 
 def insertarEstacionamiento(nombre, latitud, longitud, valoracion, Plaza):
-    conn = sqlite3.connect('base_grafo.db')
+    conn = sqlite3.connect(NombreBD)
     cursor = conn.cursor()
         
     # Insertar en la tabla nodo
@@ -70,7 +73,7 @@ def insertarEstacionamiento(nombre, latitud, longitud, valoracion, Plaza):
     conn.close()
 
 def crearArista():
-    conn = sqlite3.connect('base_grafo.db')
+    conn = sqlite3.connect(NombreBD)
     cursor = conn.cursor()
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS arista (
@@ -86,7 +89,7 @@ def crearArista():
     conn.close()
 
 def insertarArista(nodo_inicio, nodo_final, distancia):
-    conn = sqlite3.connect('base_grafo.db')
+    conn = sqlite3.connect(NombreBD)
     cursor = conn.cursor()
     cursor.execute('''
         INSERT INTO arista (NodoInicio, NodoFinal, Distancia)
@@ -126,6 +129,6 @@ a1 = Arista.obtener(9)
 distancia , finl = a1.ObtenerDistancia()
 print(f"Distancia {distancia}, Final {finl}")
 """
-grafo = Grafo()
-grafo.buscarVecino(7)
+Aco = ACO ()
+Aco.imprimir()
 
