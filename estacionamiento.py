@@ -34,6 +34,16 @@ class Estacionamiento(Nodo):
                 Plaza=resultado[5]
             )
         return None
-    
+    # Metodo para ver si esta lleno
     def esta_lleno(self):
         return self.plaza == 0
+    # Ocupar (Mejorar para registrar usuario)
+    def ocupar(self):
+        if self.plaza == 0:
+            return False
+        self.plaza -= 1
+        return True
+    # desocupar  (Mejorar para eliminar usuario)
+    def desocupar(self):
+        self.plaza += 1
+

@@ -1,6 +1,8 @@
 #Clase Nodo
 import sqlite3
 
+NombreBD = 'base_grafo.db'
+
 class Nodo:
     def __init__(self, id, nombre, latitud, longitud):
         self.id = id
@@ -11,7 +13,7 @@ class Nodo:
     # Metodo para obtener un nodo por su ID
     @staticmethod
     def obtener(id):
-        conn = sqlite3.connect('base_grafo.db')
+        conn = sqlite3.connect(NombreBD)
         cursor = conn.cursor()
         cursor.execute("SELECT * FROM nodo WHERE ID = ?", (id,))
         resultado = cursor.fetchone()  # Obtener una fila del resultado

@@ -8,6 +8,7 @@ Clase Arista 		ID|NodoInicio|NodoFinal|Distancia(m)
 from nodo import Nodo
 from estacionamiento import Estacionamiento
 from arista import Arista
+from grafo import Grafo
 import sqlite3
 
 def crearBaseNodos():
@@ -120,7 +121,11 @@ def Origen():
     insertarArista(7,6,1)
 
 
+"""a1 = Arista.obtener(10)
 a1 = Arista.obtener(9)
 distancia , finl = a1.ObtenerDistancia()
 print(f"Distancia {distancia}, Final {finl}")
+"""
+grafo = Grafo()
+grafo.buscarVecino(7)
 
