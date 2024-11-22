@@ -129,6 +129,6 @@ a1 = Arista.obtener(9)
 distancia , finl = a1.ObtenerDistancia()
 print(f"Distancia {distancia}, Final {finl}")
 """
-Aco = ACO ()
-Aco.imprimir()
+Aco = ACO (1)
+Aco.ejecutar()
 
