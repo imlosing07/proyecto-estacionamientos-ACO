@@ -2,11 +2,11 @@ from nodo import Nodo
 import sqlite3
 
 class Estacionamiento(Nodo):
-    def __init__(self, id, nombre, latitud, longitud, valoracion, ocupado):
-        # constructor 
+    def __init__(self, id, nombre, latitud, longitud, valoracion, Plaza):
+        # constructor de nodo
         super().__init__(id, nombre, latitud, longitud)
         self.valoracion = valoracion
-        self.ocupado = ocupado
+        self.plaza = Plaza
 
     # Método para obtener un estacionamiento por su ID
     @staticmethod
@@ -14,7 +14,7 @@ class Estacionamiento(Nodo):
         conn = sqlite3.connect('base_grafo.db')
         cursor = conn.cursor()
         cursor.execute('''
-            SELECT nodo.ID, nodo.Nombre, nodo.Latitud, nodo.Longitud, estacionamiento.Valoracion, estacionamiento.Ocupado
+            SELECT nodo.ID, nodo.Nombre, nodo.Latitud, nodo.Longitud, estacionamiento.Valoracion, estacionamiento.Plaza
             FROM nodo
             JOIN estacionamiento ON nodo.ID = estacionamiento.NodoID
             WHERE nodo.ID = ?
@@ -31,6 +31,9 @@ class Estacionamiento(Nodo):
                 latitud=resultado[2], 
                 longitud=resultado[3], 
                 valoracion=resultado[4], 
-                ocupado=resultado[5]
+                Plaza=resultado[5]
             )
         return None
+    
+    def esta_lleno(self):
+        return self.plaza == 0

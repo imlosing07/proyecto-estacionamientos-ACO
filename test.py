@@ -1,7 +1,15 @@
 #Probar funciones
+"""
+Clase Nodo   		ID|Nombre
+Clase Estacionamiento	ID|valoracion|Ocupado(true/false)
+Clase Arista 		ID|NodoInicio|NodoFinal|Distancia(m)
+"""
+
 from nodo import Nodo
 from estacionamiento import Estacionamiento
+from arista import Arista
 import sqlite3
+
 def crearBaseNodos():
     conn = sqlite3.connect('base_grafo.db')
     cursor = conn.cursor()
@@ -32,7 +40,7 @@ def crearBaseEstacionamiento():
         CREATE TABLE IF NOT EXISTS estacionamiento (
             ID INTEGER PRIMARY KEY AUTOINCREMENT,
             Valoracion INTEGER,
-            Ocupado BOOLEAN,
+            Plaza INTEGER,
             NodoID INTEGER,
             FOREIGN KEY (NodoID) REFERENCES nodo(ID)
         )
@@ -40,7 +48,7 @@ def crearBaseEstacionamiento():
     conn.commit()
     conn.close()
 
-def insertarEstacionamiento(nombre, latitud, longitud, valoracion, ocupado):
+def insertarEstacionamiento(nombre, latitud, longitud, valoracion, Plaza):
     conn = sqlite3.connect('base_grafo.db')
     cursor = conn.cursor()
         
@@ -54,11 +62,38 @@ def insertarEstacionamiento(nombre, latitud, longitud, valoracion, ocupado):
     
     # Insertar en la tabla estacionamiento
     cursor.execute('''
-        INSERT INTO estacionamiento (Valoracion, Ocupado, NodoID)
+        INSERT INTO estacionamiento (Valoracion, Plaza, NodoID)
         VALUES (?, ?, ?)
-    ''', (valoracion, ocupado, nodo_id))
+    ''', (valoracion, Plaza, nodo_id))
     conn.commit()
     conn.close()
+
+def crearArista():
+    conn = sqlite3.connect('base_grafo.db')
+    cursor = conn.cursor()
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS arista (
+            ID INTEGER PRIMARY KEY AUTOINCREMENT,
+            NodoInicio INTEGER,
+            NodoFinal INTEGER,
+            Distancia REAL,
+            FOREIGN KEY (NodoInicio) REFERENCES nodo(ID),
+            FOREIGN KEY (NodoFinal) REFERENCES nodo(ID)
+        )
+    ''')
+    conn.commit()
+    conn.close()
+
+def insertarArista(nodo_inicio, nodo_final, distancia):
+    conn = sqlite3.connect('base_grafo.db')
+    cursor = conn.cursor()
+    cursor.execute('''
+        INSERT INTO arista (NodoInicio, NodoFinal, Distancia)
+        VALUES (?, ?, ?)
+    ''', (nodo_inicio, nodo_final, distancia))
+    conn.commit()
+    conn.close()
+
 
 def Origen():
     crearBaseNodos()
@@ -69,7 +104,23 @@ def Origen():
     insertarNodo("nodo4",2.25,2.5)
     insertarNodo("nodo5",2.25,2.5)
     insertarNodo("nodo6",2.25,2.5)
-    insertarEstacionamiento("Estacionamiento 1",2.5,2.25,5,False)
+    insertarEstacionamiento("Estacionamiento 1",2.5,2.25,5,2)
+    crearArista()
+    insertarArista(1,2,5)
+    insertarArista(1,3,11)
+    insertarArista(2,3,4)
+    insertarArista(2,4,3)
+    insertarArista(3,1,11)
+    insertarArista(3,6,5)
+    insertarArista(3,4,10)
+    insertarArista(4,5,5)
+    insertarArista(5,6,2)
+    insertarArista(6,7,1)
+    insertarArista(6,3,5)
+    insertarArista(7,6,1)
 
-e1 = Estacionamiento.obtener(7)
-print(e1.ocupado)
+
+a1 = Arista.obtener(9)
+distancia , finl = a1.ObtenerDistancia()
+print(f"Distancia {distancia}, Final {finl}")
+

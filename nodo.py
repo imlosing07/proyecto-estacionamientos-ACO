@@ -20,3 +20,5 @@ class Nodo:
         if resultado:
             return Nodo(id=resultado[0], nombre=resultado[1], latitud=resultado[2], longitud=resultado[3])
         return None
+    
+    
