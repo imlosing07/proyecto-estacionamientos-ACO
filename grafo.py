@@ -7,7 +7,7 @@ F = (1-p) * F
 F = F + Q / distancia
 """
 from arista import Arista
-from config import NombreBD
+from config import NombreBD, IndiceFeromona, INDICE_EVAPORACION
 import sqlite3
 
 class Grafo:
@@ -33,14 +33,14 @@ class Grafo:
                 distancia=registro[3]
             ))
     # Evopora las feromonas
-    def evaporar(self,indiceEvaporacion):
+    def evaporar(self):
         for arista in self.aristas:
-            arista.feromonas = arista.feromonas * (1 - indiceEvaporacion)
+            arista.feromonas = arista.feromonas * (1 - INDICE_EVAPORACION)
             
     # resetear feromonas
     def resetear(self):
         for arista in self.aristas:
-            arista.feromonas = 1.0
+            arista.feromonas = IndiceFeromona
 
     # Buscar vecino 
     def buscarVecino(self, idNodo):
@@ -69,4 +69,4 @@ class Grafo:
     def imprimir(self):
         for arista in self.aristas:
             distancia, nodo = arista.ObtenerDistancia()
-            print(f"La distancia {distancia}, nodo Final {nodo} y feromonas {arista.feromonas}")
+            print(f"({arista.id}) La distancia {distancia}, nodo Final {nodo} y feromonas {arista.feromonas}")

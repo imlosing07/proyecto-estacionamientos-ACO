@@ -1,5 +1,5 @@
 from estacionamiento import Estacionamiento
-from config import NombreBD, IndiceFeromona
+from config import NombreBD, IndiceFeromona, PESO_OCUPADO
 import sqlite3
 
 class Arista:
@@ -37,7 +37,7 @@ class Arista:
         estacionamiento = Estacionamiento.obtener(self.nodoFinal) #Ver si existe estacionamiento
         if estacionamiento and estacionamiento.esta_lleno():
             del estacionamiento # eliminar
-            return 10000, self.nodoFinal # Cambiar la distancia para la solucion 
+            return PESO_OCUPADO, self.nodoFinal # Cambiar la distancia para la solucion 
         else:
             del estacionamiento # eliminar
             return self.distancia, self.nodoFinal
