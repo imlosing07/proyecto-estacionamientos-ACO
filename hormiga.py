@@ -31,7 +31,6 @@ class Hormiga:
                     probabilidad = (vecino.feromonas ** self.alfa)  *  ((1 / distancia) ** self.beta)
                     probabilidades[vecino] = probabilidad
                     total += probabilidad
-                    print(f"({vecino.id}) = {probabilidad}")
 
         if total == 0:
             return 0
@@ -40,8 +39,10 @@ class Hormiga:
         self.distanciaTotal += aristaCambio.distancia # aumentar distancia
         self.Arista.append(aristaCambio.id) #guardar arista
         self.nodoActual = Nodo.obtener(aristaCambio.nodoFinal)
-        self.Nodos.append(self.nodoActual.id)
-        print(f"Se mueve en la arista {aristaCambio.id} a nodo {self.nodoActual.id}")
+        if self.nodoActual == None:
+            print(f"Error no se encontro el nodo {aristaCambio.nodoFinal}")
+        self.Nodos.append(aristaCambio.nodoFinal)
+        #print(f"Se mueve en la arista {aristaCambio.id} a nodo {self.nodoActual.id}") #Eliminar
         if Estacionamiento.obtener(self.nodoActual.id):
             return 2
         return 1

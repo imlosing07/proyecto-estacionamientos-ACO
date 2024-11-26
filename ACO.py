@@ -1,6 +1,6 @@
 from grafo import Grafo
 from hormiga import Hormiga
-from config import FeromonaDepositida
+from config import FeromonaDepositida, ITERACION
 class ACO(Grafo):
     def __init__(self,idInicio):
         super().__init__()
@@ -9,18 +9,26 @@ class ACO(Grafo):
         self.hormigas = [] # Hormigas = nodos / 2 
         self.menorDistancia = 1000000
         self.hormigas.append(Hormiga(idInicio=idInicio,alfa=5,beta=2))
+        self.hormigas.append(Hormiga(idInicio=idInicio,alfa=5,beta=2))
+        self.hormigas.append(Hormiga(idInicio=idInicio,alfa=2,beta=2))
         self.hormigas.append(Hormiga(idInicio=idInicio,alfa=2,beta=2))
         self.hormigas.append(Hormiga(idInicio=idInicio,alfa=2,beta=5))
+        self.hormigas.append(Hormiga(idInicio=idInicio,alfa=2,beta=5))
 
-    def ejecutar(self,iteracion=5):
+    def ejecutar(self,iteracion=ITERACION):
         if iteracion == 0: # si llega a cero
-            print("--------------------------")
+            print("-------------- 0 ------------") #Eliminar
+            print("Nodo")
             print(self.NodoRapida)
+            print("Arista")
             print(self.AristaRapida)
+            print(f"Menor de {self.menorDistancia:.2f}")
+            #self.imprimir() #Eliminar
             return 
         
+        print(f"---------------- {iteracion} iter ----------------") #Eliminar
+
         for hormiga in self.hormigas:
-            print("--------------------------")
             resultado = 0
             while (True):
                 vecinos = self.buscarVecino(hormiga.ubicacionActual())
@@ -29,26 +37,25 @@ class ACO(Grafo):
                     break
           
             if (resultado == 2):
-                for arista in self.aristas:
+                """for arista in self.aristas:
                     if arista.id in hormiga.Arista:
-                        arista.feromonas += FeromonaDepositida/arista.distancia # aumentar la feromona   
+                        arista.feromonas += FeromonaDepositida/arista.distancia""" # aumentar la feromona   
 
                 # Guardatos del minimo
-                print(f"Menor de {hormiga.distanciaTotal} y {self.menorDistancia}")
+                print(f"Menor de {hormiga.distanciaTotal} y {self.menorDistancia}")#eliminar
                 self.menorDistancia = min(hormiga.distanciaTotal, self.menorDistancia)
                 if (self.menorDistancia == hormiga.distanciaTotal):
                     self.NodoRapida = hormiga.Nodos # guardar el menor
                     self.AristaRapida = hormiga.Arista
-                    # aumentar la feromona 
+                    for arista in self.aristas:
+                        if arista.id in hormiga.Arista:
+                            arista.feromonas += (FeromonaDepositida/arista.distancia)*2 # aumentar la feromona 
+                else:
                     for arista in self.aristas:
                         if arista.id in hormiga.Arista:
                             arista.feromonas += FeromonaDepositida/arista.distancia # aumentar la feromona 
-                    print(hormiga.Arista)
-                    print(hormiga.Nodos)
-                print(hormiga.distanciaTotal)
-
+ 
             hormiga.resetear()
         self.evaporar() #evaporar feromonas
-        self.imprimir()
 
         self.ejecutar(iteracion - 1)

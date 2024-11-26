@@ -69,4 +69,4 @@ class Grafo:
     def imprimir(self):
         for arista in self.aristas:
             distancia, nodo = arista.ObtenerDistancia()
-            print(f"({arista.id}) La distancia {distancia}, nodo Final {nodo} y feromonas {arista.feromonas}")
+            print(f"({arista.id}) La distancia {distancia}, nodo Final {nodo} y feromonas {arista.feromonas}") #Eliminar
