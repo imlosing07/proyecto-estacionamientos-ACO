@@ -48,3 +48,13 @@ class Estacionamiento(Nodo):
     def desocupar(self):
         self.plaza += 1
 
+    def exportJson(self):
+        # Devolver un diccionario con todos los atributos de la clase
+        return {
+            "id": self.id,
+            "nombre": self.nombre,
+            "latitud": self.latitud,
+            "longitud": self.longitud,
+            "valoracion": self.valoracion,
+            "plaza": self.plaza
+        }

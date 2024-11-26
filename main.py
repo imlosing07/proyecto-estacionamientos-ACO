@@ -56,4 +56,5 @@ def retornaRuta(datos: Datos):
     id_Nodo = obtener_nodo_mas_cercano(datos.latitud,datos.longitud)
     Aco = ACO (id_Nodo)
     respuesta  = Aco.ejecutar()
+    del Aco
     return respuesta

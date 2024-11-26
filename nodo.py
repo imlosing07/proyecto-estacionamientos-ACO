@@ -22,4 +22,5 @@ class Nodo:
             return Nodo(id=resultado[0], nombre=resultado[1], latitud=resultado[2], longitud=resultado[3])
         return None
     
-    
+    def exportJson(self):
+        return {"id":self.id,"nombre":self.nombre,"latitud":self.latitud,"longitud":self.longitud}

@@ -1,5 +1,7 @@
 from grafo import Grafo
 from hormiga import Hormiga
+from nodo import Nodo
+from estacionamiento import Estacionamiento
 from config import FeromonaDepositida, ITERACION
 class ACO(Grafo):
     def __init__(self,idInicio):
@@ -23,10 +25,25 @@ class ACO(Grafo):
             print(self.AristaRapida)
             print(f"Menor de {self.menorDistancia:.2f}")
             #self.imprimir() #Eliminar
+            nodos_dict = {}
+            llegada = ""
+            i = 0
+            for nodo_id in self.NodoRapida:
+                nodo_objeto = Nodo.obtener(nodo_id) 
+                if nodo_objeto and i != len(self.NodoRapida) - 1:
+                    nodos_dict[i] = nodo_objeto.exportJson()   
+                elif i == len(self.NodoRapida)-1:    
+                    print(nodo_id)
+                    estacionamiento = Estacionamiento.obtener(nodo_id)
+                    llegada = estacionamiento.exportJson()
+                i += 1
+
+            # Devolvemos el diccionario con los nodos y otros datos
             return {
-                "Nodo":self.NodoRapida,
-                "Arista":self.AristaRapida,
-                "distancia":f"{self.menorDistancia:.2f}"
+                "Nodo": nodos_dict,
+                "Arista": self.AristaRapida,
+                "Estacionamiento":llegada,
+                "distancia": f"{self.menorDistancia:.2f}"
             }
         
         #print(f"---------------- {iteracion} iter ----------------") #Eliminar
