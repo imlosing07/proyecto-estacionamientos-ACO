@@ -8,25 +8,28 @@ class ACO(Grafo):
         self.AristaRapida = [] 
         self.hormigas = [] # Hormigas = nodos / 2 
         self.menorDistancia = 1000000
-        self.hormigas.append(Hormiga(idInicio=idInicio,alfa=5,beta=2))
-        self.hormigas.append(Hormiga(idInicio=idInicio,alfa=5,beta=2))
-        self.hormigas.append(Hormiga(idInicio=idInicio,alfa=2,beta=2))
-        self.hormigas.append(Hormiga(idInicio=idInicio,alfa=2,beta=2))
+        self.hormigas.append(Hormiga(idInicio=idInicio,alfa=5,beta=1))
+        self.hormigas.append(Hormiga(idInicio=idInicio,alfa=5,beta=1))
+        self.hormigas.append(Hormiga(idInicio=idInicio,alfa=4,beta=4))
+        self.hormigas.append(Hormiga(idInicio=idInicio,alfa=3,beta=3))
         self.hormigas.append(Hormiga(idInicio=idInicio,alfa=2,beta=5))
         self.hormigas.append(Hormiga(idInicio=idInicio,alfa=2,beta=5))
 
     def ejecutar(self,iteracion=ITERACION):
         if iteracion == 0: # si llega a cero
-            print("-------------- 0 ------------") #Eliminar
             print("Nodo")
             print(self.NodoRapida)
             print("Arista")
             print(self.AristaRapida)
             print(f"Menor de {self.menorDistancia:.2f}")
             #self.imprimir() #Eliminar
-            return 
+            return {
+                "Nodo":self.NodoRapida,
+                "Arista":self.AristaRapida,
+                "distancia":f"{self.menorDistancia:.2f}"
+            }
         
-        print(f"---------------- {iteracion} iter ----------------") #Eliminar
+        #print(f"---------------- {iteracion} iter ----------------") #Eliminar
 
         for hormiga in self.hormigas:
             resultado = 0
@@ -42,7 +45,7 @@ class ACO(Grafo):
                         arista.feromonas += FeromonaDepositida/arista.distancia""" # aumentar la feromona   
 
                 # Guardatos del minimo
-                print(f"Menor de {hormiga.distanciaTotal} y {self.menorDistancia}")#eliminar
+                #print(f"Menor de {hormiga.distanciaTotal} y {self.menorDistancia}")#eliminar
                 self.menorDistancia = min(hormiga.distanciaTotal, self.menorDistancia)
                 if (self.menorDistancia == hormiga.distanciaTotal):
                     self.NodoRapida = hormiga.Nodos # guardar el menor
@@ -58,4 +61,4 @@ class ACO(Grafo):
             hormiga.resetear()
         self.evaporar() #evaporar feromonas
 
-        self.ejecutar(iteracion - 1)
+        return self.ejecutar(iteracion - 1)

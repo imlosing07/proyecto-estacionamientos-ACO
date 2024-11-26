@@ -5,10 +5,6 @@ Clase Estacionamiento	ID|valoracion|Ocupado(true/false)
 Clase Arista 		ID|NodoInicio|NodoFinal|Distancia(m)
 """
 
-from nodo import Nodo
-from estacionamiento import Estacionamiento
-from arista import Arista
-from grafo import Grafo
 from ACO import ACO
 from config import NombreBD
 import sqlite3
@@ -556,5 +552,6 @@ def Origen():
 #Origen()
 
 Aco = ACO (1)
-Aco.ejecutar()
+respuesta  = Aco.ejecutar()
+print(respuesta)
 
