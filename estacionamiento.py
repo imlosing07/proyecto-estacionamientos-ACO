@@ -1,6 +1,5 @@
+#Clase estacionamiento heradado de nodo
 from nodo import Nodo
-from config import NombreBD
-import sqlite3
 
 class Estacionamiento(Nodo):
     def __init__(self, id, nombre, latitud, longitud, valoracion, Plaza):
@@ -9,32 +8,6 @@ class Estacionamiento(Nodo):
         self.valoracion = valoracion
         self.plaza = Plaza
 
-    # Método para obtener un estacionamiento por su ID
-    @staticmethod
-    def obtener(id):
-        conn = sqlite3.connect(NombreBD)
-        cursor = conn.cursor()
-        cursor.execute('''
-            SELECT nodo.ID, nodo.Nombre, nodo.Latitud, nodo.Longitud, estacionamiento.Valoracion, estacionamiento.Plaza
-            FROM nodo
-            JOIN estacionamiento ON nodo.ID = estacionamiento.NodoID
-            WHERE nodo.ID = ?
-
-        ''', (id,))
-        resultado = cursor.fetchone()  # Obtener una fila del resultado
-        conn.close()
-
-        if resultado:
-            # Crear un objeto Estacionamiento con los datos de la base de datos
-            return Estacionamiento(
-                id=resultado[0], 
-                nombre=resultado[1], 
-                latitud=resultado[2], 
-                longitud=resultado[3], 
-                valoracion=resultado[4], 
-                Plaza=resultado[5]
-            )
-        return None
     # Metodo para ver si esta lleno
     def esta_lleno(self):
         return self.plaza == 0
@@ -58,3 +31,6 @@ class Estacionamiento(Nodo):
             "valoracion": self.valoracion,
             "plaza": self.plaza
         }
+
+    def soyEstacionamiento(self):
+        return True

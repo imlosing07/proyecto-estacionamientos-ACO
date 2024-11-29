@@ -1,51 +1,48 @@
-"""- Probabilidad de elegir caminos
-P(A) = (F^alfa * (1/D)* beta)/ Total de arriba
-F = feromona vecina
-D = distancia
-alfa = influencia de feromonas
-beta = influencia de visibilidad"""
-from nodo import Nodo
+# Clase hormiga
 from arista import Arista
-from estacionamiento import Estacionamiento
-from config import PESO_OCUPADO
+from config import FACTOR_ESCALAR
 import random
 
 class Hormiga:
-    def __init__(self,idInicio,alfa,beta):
-        self.nodoActual = Nodo.obtener(idInicio)
-        self.origen = Nodo.obtener(idInicio)
-        self.Nodos = [] # ruta de nodos menos la de inicio
-        self.Arista = [] # ruta de Arista
+    def __init__(self,nodoInicio,alfa,beta):
+        self.nodoActual = nodoInicio
+        self.origen = nodoInicio
+        self.NodosVisitados = set() #lista de nodos
+        self.NodosOrdenados = []
+        self.Aristas = [] # ruta de Arista
         self.alfa = alfa
         self.beta = beta
-        self.distanciaTotal = 0
+        self.distancia = 0
 
-    # moverse 0 = vacio, 1 = moviendo, 2 = llego
-    def moverse(self, vecinos):
-        probabilidades = {} # Diccinario
+    # retorna -1 si no encontro ruta
+    # retorna 0 si encontro un nodo
+    # retorna 1 si encontro el estacionamiento
+    def mover(self,vecinos): 
+        # sacar probabilidades
+        probabilidades = {}
         total = 0
-        for vecino in vecinos:
-            if vecino.nodoFinal not in self.Nodos:
-                distancia, nodo = vecino.ObtenerDistancia()
-                if distancia != PESO_OCUPADO:
-                    probabilidad = (vecino.feromonas ** self.alfa)  *  ((1 / distancia) ** self.beta)
-                    probabilidades[vecino] = probabilidad
-                    total += probabilidad
-
+        for arista in vecinos:
+            if arista.nodoFinal.id not in self.NodosVisitados:
+                probabilidad = (arista.feromonas ** self.alfa) * ((1/(arista.obtenerDistacia()/FACTOR_ESCALAR)) ** self.beta)
+                probabilidades[arista] = probabilidad
+                total += probabilidad
         if total == 0:
+            return -1
+        
+        arista = self.moverseProbablidad(probabilidades,total)
+        # agregar rutas
+        self.Aristas.append(arista)
+        self.NodosVisitados.add(arista.nodoFinal.id) 
+        self.NodosOrdenados.append(arista.nodoFinal.id)
+        self.nodoActual = arista.nodoFinal # actualizar ubicacion
+        self.distancia += arista.distancia
+        #print(f"({arista.id}) Desde {arista.nodoInicio.nombre} Moverse a {arista.nodoFinal.nombre} [{arista.nodoFinal.id}]") # Eliminar
+        if(arista.nodoFinal.soyEstacionamiento()):
+            #print(f"LLego al estacionamiento ({arista.nodoFinal.id}) {arista.nodoFinal.nombre}")  # Eliminar
             return 0
+        else:
+            return 1
 
-        aristaCambio = self.moverseProbablidad(probablidades=probabilidades,total=total)
-        self.distanciaTotal += aristaCambio.distancia # aumentar distancia
-        self.Arista.append(aristaCambio.id) #guardar arista
-        self.nodoActual = Nodo.obtener(aristaCambio.nodoFinal)
-        if self.nodoActual == None:
-            print(f"Error no se encontro el nodo {aristaCambio.nodoFinal}")
-        self.Nodos.append(aristaCambio.nodoFinal)
-        #print(f"Se mueve en la arista {aristaCambio.id} a nodo {self.nodoActual.id}") #Eliminar
-        if Estacionamiento.obtener(self.nodoActual.id):
-            return 2
-        return 1
 
     # moverse con la probabilidad calculada
     def moverseProbablidad(self, probablidades, total):
@@ -59,13 +56,15 @@ class Hormiga:
                 seleccion = arista
                 break
         return seleccion
-
-    # retorna id de ubicacion actual
-    def ubicacionActual(self):
-        return self.nodoActual.id
-    # regresar al origen
+    
+    # regresar al inicio
     def resetear(self):
         self.nodoActual = self.origen
-        self.Nodos = [] 
-        self.Arista = [] 
-        self.distanciaTotal = 0
+        self.NodosVisitados = set()
+        self.NodosOrdenados = []
+        self.Arista = []
+        self.distancia = 0
+
+    # ubicacion actual
+    def ubicacion_actual(self):
+        return self.nodoActual.id
