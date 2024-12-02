@@ -30,14 +30,12 @@ def retornaRuta(datos: Datos):
     cordenadas = cordenada.split(" ")
     if len(cordenadas) != 2:
         return {"error":"las coordenadas son invalidas"}
-    else:
-        latitud = float(cordenadas[0]) + 1
-        longitud = float(cordenadas[1]) + 1
-        return {"latitud":latitud,"longitud":longitud}
+    latitud = float(cordenadas[0]) + 1
+    longitud = float(cordenadas[1]) + 1
 
-    """idNodo = grafo.buscarNodo(datos.latitud,datos.longitud)
+    idNodo = grafo.buscarNodo(latitud,longitud)
     aco = ACO(grafo,idNodo)
     respuesta  = aco.ejecutar()
     grafo.resetear() # resetear feromonas
     del aco #eliminar objeto
-    return respuesta"""
+    return respuesta
