@@ -12,8 +12,7 @@ from grafo import Grafo
 #clase para mandar
 class Datos(BaseModel):
     nombre: str
-    latitud: float
-    longitud: float
+    cordenada: str
 
 
 app = FastAPI()
@@ -27,9 +26,18 @@ def inicio():
 # Recepcionar datos
 @app.post("/recibir_ruta/")
 def retornaRuta(datos: Datos):
-    idNodo = grafo.buscarNodo(datos.latitud,datos.longitud)
+    cordenada = datos.cordenada
+    cordenadas = cordenada.split(" ")
+    if len(cordenadas) != 2:
+        return {"error":"las coordenadas son invalidas"}
+    else:
+        latitud = float(cordenadas[0]) + 1
+        longitud = float(cordenadas[1]) + 1
+        return {"latitud":latitud,"longitud":longitud}
+
+    """idNodo = grafo.buscarNodo(datos.latitud,datos.longitud)
     aco = ACO(grafo,idNodo)
     respuesta  = aco.ejecutar()
     grafo.resetear() # resetear feromonas
     del aco #eliminar objeto
-    return respuesta
+    return respuesta"""
