@@ -27,7 +27,7 @@ def inicio():
 @app.post("/recibir_ruta/")
 def retornaRuta(datos: Datos):
     cordenada = datos.cordenada
-    cordenadas = cordenada.split(" ")
+    cordenadas = cordenada.split(", ")
     if len(cordenadas) != 2:
         return {"error":"las coordenadas son invalidas"}
     latitud = float(cordenadas[0]) + 1
