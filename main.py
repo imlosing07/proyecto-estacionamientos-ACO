@@ -30,8 +30,8 @@ def retornaRuta(datos: Datos):
     cordenadas = cordenada.split(", ")
     if len(cordenadas) != 2:
         return {"error":"las coordenadas son invalidas"}
-    latitud = float(cordenadas[0]) + 1
-    longitud = float(cordenadas[1]) + 1
+    latitud = float(cordenadas[0])
+    longitud = float(cordenadas[1])
 
     idNodo = grafo.buscarNodo(latitud,longitud)
     aco = ACO(grafo,idNodo)
