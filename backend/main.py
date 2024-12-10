@@ -5,9 +5,10 @@ ReDoc: http://127.0.0.1:8000/redoc
 """
 from fastapi import FastAPI
 from pydantic import BaseModel
+from fastapi.middleware.cors import CORSMiddleware
 from ACO import ACO
 from grafo import Grafo
-
+from typing import Any
 
 #clase para mandar
 class Datos(BaseModel):
@@ -18,14 +19,25 @@ class Datos(BaseModel):
 app = FastAPI()
 grafo = Grafo() # grafo inicializado
 
+# Configuración de CORS
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Permitir todos los orígenes
+    allow_credentials=True,
+    allow_methods=["*"],  # Permitir todos los métodos HTTP
+    allow_headers=["*"],  # Permitir todos los encabezados
+)
 # metod para construir la api
 @app.get("/")
 def inicio():
     return {"mensaje": "Bienevenido a la aplicacion"}
-
+    
+@app.options("/recibir_ruta/")
+def handle_options():
+    return {"allow": "POST"}
 # Recepcionar datos
 @app.post("/recibir_ruta/")
-def retornaRuta(datos: Datos):
+def retornaRuta(datos: Datos) -> Any:
     cordenada = datos.cordenada
     cordenadas = cordenada.split(", ")
     if len(cordenadas) != 2:
