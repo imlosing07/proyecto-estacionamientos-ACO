@@ -61,6 +61,8 @@ class ACO:
         for sol in self.solucion:
             i += 1
             SolucionNodos[i] = self.grafo.nodos[sol].exportJson()
-        
+            estacionamiento = self.grafo.nodos[sol]
+            
+        estacionamiento.ocupar()
         i += 1
         return {"distancia":self.distanciaMinima,"rutas":SolucionNodos,"nodosTotales":i}

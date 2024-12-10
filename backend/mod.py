@@ -5,7 +5,7 @@ from config import NOMBRE_BD
 # Conectar a la base de datos
 conn = sqlite3.connect(NOMBRE_BD)
 cursor = conn.cursor()
-
+print("Iniciando ....")
 # Consultar las filas para asegurarse de que existen datos
 cursor.execute("SELECT COUNT(*) FROM estacionamiento")
 total_filas = cursor.fetchone()[0]
