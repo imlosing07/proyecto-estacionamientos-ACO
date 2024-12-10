@@ -1,5 +1,7 @@
-NombreBD = 'base_grafo.db'
-IndiceFeromona = 0.5 #Feromonas = C/(nodosTotales*longuitud)
-PESO_OCUPADO = 1000 #1 km si esta ocupado el estacionamiento
-INDICE_EVAPORACION = 0.25 
-FeromonaDepositida = 2.0
+FEROMONA_INICIAL = 1.0
+NOMBRE_BD = 'base_grafo.db'
+INDICE_EVAPORACION = 0.1
+VALOR_DISTANCIA_OCUPADA = 1000
+FACTOR_ESCALAR = 250
+FEROMONA_COLOCAR = 250.0
+ITERACIONES = 10

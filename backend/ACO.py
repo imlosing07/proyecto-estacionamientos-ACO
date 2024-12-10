@@ -1,54 +1,83 @@
-from grafo import Grafo
-from hormiga import Hormiga
-from config import FeromonaDepositida
-class ACO(Grafo):
-    def __init__(self,idInicio):
-        super().__init__()
-        self.NodoRapida = [] # guardar mejor camino
-        self.AristaRapida = [] 
-        self.hormigas = [] # Hormigas = nodos / 2 
-        self.menorDistancia = 1000000
-        self.hormigas.append(Hormiga(idInicio=idInicio,alfa=5,beta=2))
-        self.hormigas.append(Hormiga(idInicio=idInicio,alfa=2,beta=2))
-        self.hormigas.append(Hormiga(idInicio=idInicio,alfa=2,beta=5))
+from grafo import Grafo  # Importa la clase que representa el grafo.
+from hormiga import Hormiga  # Importa la clase que representa una hormiga.
+from config import FEROMONA_COLOCAR, ITERACIONES  # Configuración de feromonas y número de iteraciones.
 
-    def ejecutar(self,iteracion=5):
-        if iteracion == 0: # si llega a cero
-            print("--------------------------")
-            print(self.NodoRapida)
-            print(self.AristaRapida)
-            return 
+# Clase principal que implementa el algoritmo de optimización por colonia de hormigas (ACO).
+class ACO:
+    def __init__(self, grafo, idOrigen):
+        """
+        Constructor de la clase ACO.
+        Inicializa el grafo, nodo de origen, lista de hormigas y variables para la solución.
+        """
+        self.grafo = grafo  # Grafo que se va a recorrer.
+        self.nodoOrigen = self.grafo.nodos[idOrigen]  # Nodo inicial a partir del cual las hormigas comienzan.
         
-        for hormiga in self.hormigas:
-            print("--------------------------")
-            resultado = 0
-            while (True):
-                vecinos = self.buscarVecino(hormiga.ubicacionActual())
-                resultado = hormiga.moverse(vecinos) #0 = quedo , 1 = continuar, 2 meta
-                if resultado != 1:
-                    break
-          
-            if (resultado == 2):
-                for arista in self.aristas:
-                    if arista.id in hormiga.Arista:
-                        arista.feromonas += FeromonaDepositida/arista.distancia # aumentar la feromona   
+        # Creación de una lista de hormigas que iniciarán desde el nodo de origen.
+        self.hormigas = []
+        for _ in range(4):  # Se crean 4 hormigas con los mismos parámetros alfa y beta.
+            self.hormigas.append(Hormiga(nodoInicio=self.nodoOrigen, alfa=1, beta=1))
+        
+        self.solucion = []  # Lista que almacenará la mejor ruta encontrada.
+        self.distanciaMinima = 1000000  # Distancia inicial muy grande para encontrar la mínima.
 
-                # Guardatos del minimo
-                print(f"Menor de {hormiga.distanciaTotal} y {self.menorDistancia}")
-                self.menorDistancia = min(hormiga.distanciaTotal, self.menorDistancia)
-                if (self.menorDistancia == hormiga.distanciaTotal):
-                    self.NodoRapida = hormiga.Nodos # guardar el menor
-                    self.AristaRapida = hormiga.Arista
-                    # aumentar la feromona 
-                    for arista in self.aristas:
-                        if arista.id in hormiga.Arista:
-                            arista.feromonas += FeromonaDepositida/arista.distancia # aumentar la feromona 
-                    print(hormiga.Arista)
-                    print(hormiga.Nodos)
-                print(hormiga.distanciaTotal)
+    def ejecutar(self, iteraciones=ITERACIONES):
+        """
+        Ejecuta el algoritmo ACO durante un número específico de iteraciones.
+        """
+        while iteraciones > 0:
+            soluciones = {}  # Diccionario para almacenar las rutas encontradas por las hormigas.
+            minimo = 1000000  # Valor mínimo de distancia encontrado en la iteración actual.
+            nodosMin = []  # Nodos de la ruta con la distancia mínima.
 
-            hormiga.resetear()
-        self.evaporar() #evaporar feromonas
-        self.imprimir()
+            # Cada hormiga recorre el grafo buscando rutas.
+            for hormiga in self.hormigas:
+                recorrer = 1
+                while recorrer == 1:
+                    # La hormiga se mueve al siguiente nodo basado en las feromonas y la visibilidad.
+                    recorrer = hormiga.mover(self.grafo.buscarVecino(hormiga.ubicacion_actual()))
+    
+                # Si la hormiga llegó a un destino válido (por ejemplo, un estacionamiento).
+                if recorrer == 0:
+                    # Guarda la distancia recorrida y las aristas visitadas.
+                    soluciones[hormiga.distancia] = hormiga.Aristas
+                    # Actualiza el mínimo si la ruta encontrada es mejor.
+                    if hormiga.distancia < minimo:
+                        minimo = hormiga.distancia
+                        nodosMin = hormiga.NodosOrdenados  # Guarda los nodos recorridos en la ruta mínima.
 
-        self.ejecutar(iteracion - 1)
+                # Reinicia el estado de la hormiga para la próxima iteración.
+                hormiga.resetear()
+
+            # Si se encontró una mejor solución, actualiza la solución global.
+            if minimo < self.distanciaMinima:
+                self.distanciaMinima = minimo
+                self.solucion = nodosMin
+
+            # Evapora una parte de las feromonas en todas las aristas del grafo.
+            self.grafo.evaporar()
+
+            # Coloca feromonas en las rutas encontradas.
+            for distancia, aristas in soluciones.items():
+                for arista in aristas:
+                    # La mejor ruta recibe más feromonas.
+                    if distancia == minimo:
+                        arista.feromonas += (FEROMONA_COLOCAR / distancia) * 2
+                    else:
+                        arista.feromonas += FEROMONA_COLOCAR / distancia
+
+            iteraciones -= 1  # Decrementa el contador de iteraciones.
+
+        # Genera un resultado con la mejor solución encontrada.
+        SolucionNodos = {}
+        i = 0
+        SolucionNodos[i] = self.nodoOrigen.exportJson()  # Exporta el nodo de origen.
+        for sol in self.solucion:
+            i += 1
+            SolucionNodos[i] = self.grafo.nodos[sol].exportJson()  # Exporta cada nodo de la solución.
+        
+        i += 1
+        return {
+            "distancia": self.distanciaMinima,  # La distancia total de la mejor ruta.
+            "rutas": SolucionNodos,  # La ruta completa en formato JSON.
+            "nodosTotales": i  # Número total de nodos en la solución.
+        }
