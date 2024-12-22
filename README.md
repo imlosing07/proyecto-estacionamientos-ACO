@@ -75,3 +75,45 @@ El proyecto respeta los derechos de autor de todas las herramientas y librerías
    ```bash
    git clone https://github.com/imlosing07/proyecto-estacionamientos-ACO.git
    cd proyecto-estacionamientos-ACO
+2. **Crear un Entorno Virtual**:
+   ```bash
+   python -m venv env
+   source env/bin/activate  # En Windows: env\Scripts\activate
+3. **Instalar Dependencias:**:
+   ```bash
+    pip install -r requirements.txt
+4. **Iniciar el Servidor Backend:**:
+   ```bash
+    uvicorn main:app --reload
+5. **Acceder al Frontend:**:
+Configurar FlutterFlow según el manual de usuario disponible en la documentación técnica.
+
+## **Diagrama UML**
+
+### **Diseño General**
+
+Incluye diagramas que reflejan los siguientes aspectos:
+
+1. **Arquitectura del Sistema**:
+   - Relación entre módulos (backend, API, y frontend).
+2. **Modelo de Datos**:
+   - Estructura de la base de datos.
+3. **Flujo de Información**:
+   - Secuencia de interacciones entre los usuarios y el sistema.
+
+*(El diagrama UML completo se encuentra en la carpeta `docs/uml`.)*
+
+---
+
+## **Responsabilidad Social**
+
+El proyecto aborda problemas reales relacionados con:
+
+- **Movilidad Urbana**:
+  - Reducción del tiempo y estrés para los conductores al encontrar espacios de estacionamiento.
+- **Sostenibilidad**:
+  - Disminución de la huella de carbono mediante el uso eficiente de rutas y recursos.
+
+
+## **Licencia**
+Este proyecto se distribuye bajo la licencia MIT.
