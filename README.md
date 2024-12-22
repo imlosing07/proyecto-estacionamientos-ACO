@@ -101,7 +101,7 @@ Incluye diagramas que reflejan los siguientes aspectos:
 3. **Flujo de Información**:
    - Secuencia de interacciones entre los usuarios y el sistema.
 
-*(El diagrama UML completo se encuentra en la carpeta `docs/uml`.)*
+*(El diagrama UML completo se encuentra en los anexos de los informes y diapositivas del proyecto.)*
 
 ---
 
